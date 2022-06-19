@@ -1,0 +1,210 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth; 
+}
+html a{
+    color: #414f57;
+    text-decoration: none;
+}
+body {
+    font-size: 1.6rem; 
+    font-family: "Source Sans Pro", 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 1.75;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-align: center;
+    color: #414f57;
+
+}
+
+h3{
+    font-size: 3rem;
+}
+
+main {
+    text-transform: lowercase;
+    background-image: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1)),url(../img/field.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    
+    
+}
+
+main > a{
+    display: block;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1%;
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, 0); 
+}
+main > a svg{
+    height: 80px;
+    width: auto;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5rem rgb(0, 0, 0, 0.5), 0 0 .1rem rgb(0, 0, 0, .1);
+}
+main > a svg path {
+    fill: white;
+    transition: fill 0.25s ease;
+}
+main > a:hover svg path {
+    fill: lightgray;
+}
+
+body > section{
+    padding: 3%;
+}
+
+.about {
+    background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1));
+}
+
+
+.container ul{
+    padding: 3% 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    min-width: 100px;
+    
+}
+
+.container ul li {
+    clear: both;
+    display: inline-block;
+    margin: 0 10px;
+    flex: 1;
+    padding-bottom: 50px;
+
+}
+
+
+.container img{
+    float: left;
+    height: 75%;
+    width: 100%; 
+    border-radius: 10px;   
+    margin: 0 auto;
+}
+.container p{
+    line-height: 1;
+}
+
+
+.contact > h3 + p{
+    border-bottom: lightgray 1px solid;
+
+    display: inline-block;
+    padding: 0 1%;
+    margin: 0 auto;
+
+    padding: 0;
+    
+    
+}
+.contact{
+    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.1),rgba(0,0,0,0.2));
+    padding: 8% 0;
+   
+}
+.contact p{
+    margin-top: 3%;
+   
+}
+
+.contact button{
+    padding: 10px 30px;
+    
+}
+footer {
+    width: 100%;
+    background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.1));
+    display: block;
+    color: black;
+    line-height: 75px;
+    /* position: absolute; */
+    bottom: 0;
+}
+
+
+div.main {
+    width: 400px;
+    background-color: white;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 75px 25px;
+    display: inline-block;
+    height: 490px;
+    margin-top: calc(((100vh - 565px) / 2));
+}
+div.main section.photo {
+    height: 125px;
+}
+div.main section.photo img {
+    height: 125px;
+    border-radius: 50%;
+    background: linear-gradient(slategray, lightgray);
+}
+div.main section.info {
+    height: 115px;
+}
+div.main section.info h1 {
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 50px;
+    padding-top: 25px;
+    padding-bottom: 10px;
+}
+div.main section.info h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 30px;
+}
+div.main section.links {
+    height: 100px;
+    padding-top: 37.5px;
+    padding-bottom: 12.5px;
+    box-sizing: border-box;
+}
+div.main section.links a {
+    height: 50px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 7.5px;
+}
+div.main section.links a svg {
+    height: 50px;
+    width: auto;
+}
+div.main section.links a svg path {
+    fill: #c8cccf;
+    transition: fill 0.25s ease;
+}
+div.main section.links a:hover svg path {
+    fill: #414f57;
+}
+
+@media only screen and (max-width: 444.44px) {
+    div.main {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-height: 653.88px) and (max-width: 444.44px) {
+    div.main {
+        margin: 5vw 0;
+        margin-bottom: 0;
+    }
+    footer {
+        position: relative;
+    }
+}
