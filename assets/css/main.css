@@ -9,6 +9,9 @@ html {
     font-size: 62.5%;
     scroll-behavior: smooth; 
 }
+body {
+    scroll-behavior: smooth;
+}
 html a{
     color: #414f57;
     text-decoration: none;
