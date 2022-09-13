@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 
@@ -25,6 +26,7 @@ body {
 
 h3{
     font-size: 3rem;
+    font-weight: bold;
 }
 
 main {
@@ -98,32 +100,72 @@ body > section{
     line-height: 1;
 }
 
+/* CONTACT FORM AREA*/
 
-.contact > h3 + p{
-    border-bottom: lightgray 1px solid;
-
-    display: inline-block;
-    padding: 0 1%;
-    margin: 0 auto;
-
-    padding: 0;
-    
-    
-}
 .contact{
     background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.1),rgba(0,0,0,0.2));
     padding: 8% 0;
-   
-}
-.contact p{
-    margin-top: 3%;
-   
 }
 
-.contact button{
-    padding: 10px 30px;
+.contact form{
+    
+    display: flex;
+    flex-flow: wrap;
+    margin: 10px auto;   
+    justify-content: space-between;
+    width: clamp(420px, 60%, 100%);
+}
+.contact textarea{
+    width: 100%;
+    border: 0;
+    border-top: #666 1px solid;
+    padding: 10px;
+    height: 20rem;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+}
+.contact input:first-child{
+    border-top-left-radius: 10px;
+}
+.contact input{
+    width: 50%;
+    border: 0;
+    padding: 10px;
+}
+.contact input + input{
+    border-left: #666 1px solid;
+    border-top-right-radius: 10px;
     
 }
+.contact input:focus,
+.contact textarea:focus{
+    outline: none;
+    background: rgb(255,255,255);
+background: radial-gradient(farthest-corner at 40px 20px, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(235,235,235,1) 100%);
+}
+.contact button{
+    all: unset;
+    padding: 10px 25px;
+    background: lightsteelblue;
+    margin-top: 10px;
+    
+    margin-left: auto;
+    border-radius: 5px;
+    
+}
+.contact button:focus{
+    transform: translate(1px,2px);
+    
+}
+
+.contact > h3 + p{
+    /* border-bottom: #666 1px solid; */
+    display: inline-block;
+    margin: 0 auto;
+    padding: 0 0 10px 0 ;
+}
+
+
 footer {
     width: 100%;
     background-image: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.1));
@@ -197,6 +239,37 @@ div.main section.links a:hover svg path {
     div.main {
         width: 90%;
     }
+    
+    /* CONTACT FORM AREA*/
+    
+
+    .contact form{
+        width: 95%;
+    }
+
+    .contact input:first-child{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .contact input{
+        width: 100%;
+    }
+    .contact input + input{
+        border-top: #666 1px solid;
+        border-left: 0;
+        border-top-right-radius: 0;
+    }
+    .contact button{
+        
+        padding: 10px 25px;
+        background: lightsteelblue;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        width: 100%;
+        border-radius: 10px;
+        
+    }
+
 }
 
 @media only screen and (max-height: 653.88px) and (max-width: 444.44px) {
