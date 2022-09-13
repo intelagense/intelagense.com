@@ -124,7 +124,7 @@ body > section{
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 10px;
 }
-.contact input:first-child{
+.contact input:nth-child(2){
     border-top-left-radius: 10px;
 }
 .contact input{
@@ -132,7 +132,7 @@ body > section{
     border: 0;
     padding: 10px;
 }
-.contact input + input{
+.contact input + input ~ input{
     border-left: #666 1px solid;
     border-top-right-radius: 10px;
     
@@ -148,7 +148,7 @@ background: radial-gradient(farthest-corner at 40px 20px, rgba(255,255,255,1) 0%
     padding: 10px 25px;
     background: lightsteelblue;
     margin-top: 10px;
-    
+    font-weight: bold;
     margin-left: auto;
     border-radius: 5px;
     
@@ -247,14 +247,14 @@ div.main section.links a:hover svg path {
         width: 95%;
     }
 
-    .contact input:first-child{
+    .contact input:nth-child(2){
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
     }
     .contact input{
         width: 100%;
     }
-    .contact input + input{
+    .contact input + input ~ input{
         border-top: #666 1px solid;
         border-left: 0;
         border-top-right-radius: 0;
