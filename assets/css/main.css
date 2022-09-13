@@ -69,21 +69,26 @@ body > section{
     background: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1));
 }
 
+.about p,
+.container p{
+    margin: 0 auto;
+    width: 80%;
+}
 
 .container ul{
+    margin: 0 auto;
     padding: 3% 0;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    min-width: 100px;
-    
+    width: 80%;
 }
 
 .container ul li {
     clear: both;
     display: inline-block;
     margin: 0 10px;
-    flex: 1;
+    
     padding-bottom: 50px;
 
 }
@@ -91,13 +96,12 @@ body > section{
 
 .container img{
     float: left;
-    height: 75%;
     width: 100%; 
     border-radius: 10px;   
     margin: 0 auto;
 }
 .container p{
-    line-height: 1;
+    /* line-height: 1; */
 }
 
 /* CONTACT FORM AREA*/
