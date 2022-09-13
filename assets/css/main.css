@@ -121,12 +121,9 @@ body > section{
     border-top: #666 1px solid;
     padding: 10px;
     height: 20rem;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 10px;
+    
 }
-.contact input:nth-child(2){
-    border-top-left-radius: 10px;
-}
+
 .contact input{
     width: 50%;
     border: 0;
@@ -134,7 +131,7 @@ body > section{
 }
 .contact input + input ~ input{
     border-left: #666 1px solid;
-    border-top-right-radius: 10px;
+    
     
 }
 .contact input:focus,
@@ -159,7 +156,7 @@ background: radial-gradient(farthest-corner at 40px 20px, rgba(255,255,255,1) 0%
 }
 
 .contact > h3 + p{
-    /* border-bottom: #666 1px solid; */
+    
     display: inline-block;
     margin: 0 auto;
     padding: 0 0 10px 0 ;
@@ -245,19 +242,17 @@ div.main section.links a:hover svg path {
 
     .contact form{
         width: 95%;
+        
     }
 
-    .contact input:nth-child(2){
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
+    
     .contact input{
         width: 100%;
     }
     .contact input + input ~ input{
         border-top: #666 1px solid;
         border-left: 0;
-        border-top-right-radius: 0;
+        
     }
     .contact button{
         
