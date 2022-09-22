@@ -62,7 +62,7 @@ main > p {
 h2{
     color: var(--accent-color);
     align-self: flex-end;
-    transform: rotate(180deg);
+    /* transform: rotate(180deg); */
 
 }
 ul{
