@@ -9,11 +9,17 @@
 
 /* TEST BED */
 
-.inner img{
-	width: 25%;
-	border-radius: 50%;
-	outline: 1px solid white;
+/* .inner img{
+	border-radius: 5%;
+	outline: 1px solid aliceblue;
 	background-color: #2e3141;
+} */
+
+.hero img{
+	width: 25%;
+	outline: 1px solid aliceblue;
+	background-color: #2e3141;
+	border-radius: 50%;
 }
 
 /* END TEST BED */
@@ -4165,3 +4171,5 @@ input, select, textarea {
 		}
 
 	}
+
+
