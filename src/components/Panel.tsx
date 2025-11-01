@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import Caption from './Caption'
+import type { ReactNode } from 'react'
 import HalftoneBackground from './HalftoneBackground'
 
-const PanelContainer = styled.div`
+const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
   position: relative;
   font-family: 'Comic Neue', cursive;
   color: black;
@@ -14,6 +14,7 @@ const PanelContainer = styled.div`
   font-weight: 700;
   min-height: 300px;
   overflow: hidden;
+  flex: ${props => props.$width === 'half' ? '1 1 calc(50% - 5px)' : '1 1 100%'};
 `;
 
 const PanelContent = styled.div`
@@ -31,15 +32,23 @@ const BackgroundLayer = styled.div`
   z-index: 0;
 `;
 
-function Panel() {
+interface PanelProps {
+  background?: string
+  frequency?: number
+  width?: 'full' | 'half'
+  children: ReactNode
+}
+
+function Panel({ background, frequency = 30, width = 'full', children }: PanelProps) {
   return (
-    <PanelContainer>
-      <BackgroundLayer>
-        <HalftoneBackground src="/background.jpg" frequency={30} />
-      </BackgroundLayer>
+    <PanelContainer $width={width}>
+      {background && (
+        <BackgroundLayer>
+          <HalftoneBackground src={background} frequency={frequency} />
+        </BackgroundLayer>
+      )}
       <PanelContent>
-        <Caption type="header"/>
-        <p>In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</p>
+        {children}
       </PanelContent>
     </PanelContainer>
   )
