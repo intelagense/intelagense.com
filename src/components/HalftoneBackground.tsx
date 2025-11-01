@@ -14,6 +14,9 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
   const programRef = useRef<WebGLProgram | null>(null)
   const textureRef = useRef<WebGLTexture | null>(null)
   const imageAspectRef = useRef<[number, number]>([1, 1])
+  const imageLoadedRef = useRef(false)
+  const resolutionMultiplierRef = useRef(3)
+  const lastSizeRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -69,32 +72,40 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
       imageAspectRef.current = [image.width, image.height]
+      imageLoadedRef.current = true
       render()
     }
     image.src = src
 
     function render() {
-      if (!glRef.current || !programRef.current || !canvas) return
+      if (!glRef.current || !programRef.current || !canvas || !textureRef.current || !imageLoadedRef.current) return
 
       const gl = glRef.current
       const program = programRef.current
 
       gl.useProgram(program)
 
+      // Get display size (CSS size) for cover calculations - use rounded values
+      const rect = canvas.getBoundingClientRect()
+      const displayWidth = Math.round(rect.width)
+      const displayHeight = Math.round(rect.height)
+
       // Set uniforms
       const iResolutionLoc = gl.getUniformLocation(program, 'iResolution')
       const frequencyLoc = gl.getUniformLocation(program, 'frequency')
-      const iImageAspectLoc = gl.getUniformLocation(program, 'iImageAspect')
+      const iImageSizeLoc = gl.getUniformLocation(program, 'iImageSize')
       
-      gl.uniform2f(iResolutionLoc, canvas.width, canvas.height)
+      // Use display resolution (CSS size) for cover calculations, not internal canvas resolution
+      // Use rounded integers to avoid sub-pixel issues
+      gl.uniform2f(iResolutionLoc, displayWidth, displayHeight)
+      // Frequency should be based on display size, NOT internal resolution
+      // Scaling frequency by resolution multiplier causes severe moiré
       gl.uniform1f(frequencyLoc, frequency)
-      gl.uniform2f(iImageAspectLoc, imageAspectRef.current[0], imageAspectRef.current[1])
+      gl.uniform2f(iImageSizeLoc, imageAspectRef.current[0], imageAspectRef.current[1])
 
       // Bind texture
       gl.activeTexture(gl.TEXTURE0)
-      if (textureRef.current) {
-        gl.bindTexture(gl.TEXTURE_2D, textureRef.current)
-      }
+      gl.bindTexture(gl.TEXTURE_2D, textureRef.current)
       const uSamplerLoc = gl.getUniformLocation(program, 'u_sampler')
       gl.uniform1i(uSamplerLoc, 0)
 
@@ -105,20 +116,78 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
     }
 
-    // Handle resize
-    const handleResize = () => {
+    // Handle resize - can be called directly or via ResizeObserver
+    const handleResize = (entries?: ResizeObserverEntry[]) => {
       if (!canvas) return
-      const rect = canvas.getBoundingClientRect()
-      canvas.width = rect.width
-      canvas.height = rect.height
+      
+      // Use the entry size if available, otherwise fall back to getBoundingClientRect
+      let displayWidth: number
+      let displayHeight: number
+      
+      if (entries && entries.length > 0) {
+        // Use ResizeObserver entry for accurate size
+        const entry = entries[0]
+        displayWidth = Math.round(entry.contentRect.width)
+        displayHeight = Math.round(entry.contentRect.height)
+      } else {
+        // Fallback to getBoundingClientRect
+        const rect = canvas.getBoundingClientRect()
+        displayWidth = Math.round(rect.width)
+        displayHeight = Math.round(rect.height)
+      }
+      
+      // Skip if size is invalid or hasn't actually changed
+      if ((displayWidth === 0 && displayHeight === 0) ||
+          (lastSizeRef.current.width === displayWidth && 
+           lastSizeRef.current.height === displayHeight)) {
+        return
+      }
+      
+      lastSizeRef.current = { width: displayWidth, height: displayHeight }
+      
+      // Use 3x multiplier for print-quality halftone
+      const resolutionMultiplier = 3
+      resolutionMultiplierRef.current = resolutionMultiplier
+      
+      // Set canvas internal resolution higher for finer detail
+      canvas.width = displayWidth * resolutionMultiplier
+      canvas.height = displayHeight * resolutionMultiplier
+      
+      // Set canvas CSS size to maintain display size (use exact integers)
+      // This is needed because canvas.width/height changes the element's intrinsic size
+      canvas.style.width = displayWidth + 'px'
+      canvas.style.height = displayHeight + 'px'
+      
       render()
     }
 
+    // Reset image loaded flag when src changes
+    imageLoadedRef.current = false
+    
+    // Initial resize
     handleResize()
-    window.addEventListener('resize', handleResize)
+    
+    // Set up ResizeObserver to watch both canvas and parent
+    const resizeObserver = new ResizeObserver((entries) => {
+      handleResize(entries)
+    })
+    
+    // Observe the canvas itself - ResizeObserver will detect when its size changes
+    resizeObserver.observe(canvas)
+    
+    // Also observe parent if available (as backup)
+    const parentElement = canvas.parentElement
+    if (parentElement) {
+      resizeObserver.observe(parentElement)
+    }
+    
+    // Also listen to window resize as a fallback
+    const windowResizeHandler = () => handleResize()
+    window.addEventListener('resize', windowResizeHandler)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', windowResizeHandler)
     }
   }, [src, frequency])
 
@@ -126,7 +195,17 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
     <canvas
       ref={canvasRef}
       className={className}
-      style={{ display: 'block', width: '100%', height: '100%' }}
+      style={{ 
+        display: 'block', 
+        width: '100%', 
+        height: '100%',
+        // Use auto rendering for smoother scaling - crisp-edges can cause more moiré
+        imageRendering: 'auto',
+        // Hint GPU acceleration
+        willChange: 'transform',
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden'
+      }}
     />
   )
 }

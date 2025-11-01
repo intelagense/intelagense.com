@@ -8,7 +8,7 @@ varying vec2 uv;
 uniform vec2 iResolution;
 uniform sampler2D u_sampler;
 uniform float frequency;
-uniform vec2 iImageAspect;
+uniform vec2 iImageSize;
 
 // Simplex noise function
 vec3 mod289(vec3 x) {
@@ -96,34 +96,37 @@ vec3 halftone(vec3 texcolor, vec2 st, float freq) {
 }
 
 void main() {
-  // Cover mode: scale UV to maintain aspect ratio and crop edges
-  vec2 coverUv = uv;
-  
-  // CSS object-fit: cover formula
-  // We need to map canvas UV [0,1] to image UV [0,1]
-  // For cover, we scale so the SMALLER image dimension fills the LARGER canvas dimension
-  
+  // Calculate aspect ratios
   float canvasAspect = iResolution.x / iResolution.y;
-  float imageAspect = iImageAspect.x / iImageAspect.y;
-  
-  // Calculate which dimension fills
-  // If canvas is wider than image, we need to scale UP (zoom in) so height fills
-  // If canvas is taller than image, we need to scale UP (zoom in) so width fills
-  float scale;
-  if (canvasAspect > imageAspect) {
-    // Canvas is wider - we need to zoom in to fill height
-    scale = canvasAspect / imageAspect;  // > 1
-  } else {
-    // Canvas is taller - we need to zoom in to fill width
-    scale = imageAspect / canvasAspect;  // > 1
-  }
-  
-  // Apply: divide UVs to zoom in
-  coverUv = (coverUv - 0.5) / scale + 0.5;
+  float imageAspect = iImageSize.x / iImageSize.y;
+
+  // Object-fit: cover implementation
+  vec2 coverUv = uv;
+
+  // Calculate scale factors for both dimensions
+  vec2 scale = iResolution / iImageSize;
+
+  // For cover mode, use the larger scale factor to ensure we fill the entire canvas
+  float coverScale = max(scale.x, scale.y);
+
+  // Calculate the scaled image size in UV space
+  vec2 scaledSize = iImageSize * coverScale / iResolution;
+
+  // Center the image by calculating the offset needed
+  vec2 offset = (vec2(1.0) - scaledSize) * 0.5;
+
+  // Map UV coordinates to cover the image while maintaining aspect ratio
+  coverUv = (coverUv - offset) / scaledSize;
+
+  // Flip Y coordinate (WebGL has origin at bottom-left, images at top-left)
+  coverUv.y = 1.0 - coverUv.y;
+
+  // Clamp UV coordinates to prevent wrapping artifacts
+  coverUv = clamp(coverUv, vec2(0.0), vec2(1.0));
   
   vec4 texcolor = texture2D(u_sampler, coverUv);
   vec2 st = uv;
-  st.x *= iResolution.x / iResolution.y;
+  st.x *= canvasAspect;
   gl_FragColor.rgb = halftone(texcolor.rgb, st, frequency);
   gl_FragColor.a = 1.0;
 }

@@ -13,20 +13,37 @@ const PageContainer = styled.div`
   background-color: #eee;
 `
 
+const TitleImage = styled.img`
+  max-width: 80%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+`
+
+const TitleText = styled.div<{ place: 'left' | 'right' }>`
+  text-align: ${props => props.place === 'left' ? 'left' : 'right'};
+  font-family: 'Comic Neue', cursive;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0 2em ;
+  font-size: 1.5rem;
+`
+
 function App() {
   return (
     <PageContainer>
-      <Panel background="/background.jpg" frequency={90} width="full">
-        <Caption type="header"/>
-        <p>In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</p>
+      <Panel background="/bgcave.jpg" frequency={90} width="full">
+        <TitleText place="left">Eric Wynn Romere</TitleText>
+        <TitleImage src="/intelagensetitle.png" alt="logo" />
+        <TitleText place="right">Software Engineer</TitleText>
       </Panel>
-      <Panel background="/bg.jpg" frequency={90} width="half">
-        <Caption type="header"/>
-        <p>In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</p>
+      <Panel background="/whoknows.png" frequency={90} width="half">
+        <Caption type="footer">hero I guess?</Caption>
       </Panel>
       <Panel background="/background.jpg" frequency={90} width="half">
-        <Caption type="header"/>
         <p>In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</p>
+        <Caption type="header">PROPERTY JOURNAL</Caption>
+        <Caption type="footer">INTELAGENSE</Caption>
       </Panel>
     </PageContainer>
   )

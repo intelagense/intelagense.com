@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import type { ReactNode } from 'react'
+import { Children, type ReactNode } from 'react'
 import HalftoneBackground from './HalftoneBackground'
+import Caption from './Caption'
 
 const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
   position: relative;
@@ -21,6 +22,8 @@ const PanelContent = styled.div`
   position: relative;
   z-index: 1;
   pointer-events: none;
+  padding-top: 40px;
+  padding-bottom: 40px;
 `;
 
 const BackgroundLayer = styled.div`
@@ -40,6 +43,18 @@ interface PanelProps {
 }
 
 function Panel({ background, frequency = 30, width = 'full', children }: PanelProps) {
+  // Separate captions from other content
+  const captions: ReactNode[] = []
+  const content: ReactNode[] = []
+
+  Children.forEach(children, (child) => {
+    if (child && typeof child === 'object' && 'type' in child && child.type === Caption) {
+      captions.push(child)
+    } else {
+      content.push(child)
+    }
+  })
+
   return (
     <PanelContainer $width={width}>
       {background && (
@@ -47,8 +62,9 @@ function Panel({ background, frequency = 30, width = 'full', children }: PanelPr
           <HalftoneBackground src={background} frequency={frequency} />
         </BackgroundLayer>
       )}
+      {captions}
       <PanelContent>
-        {children}
+        {content}
       </PanelContent>
     </PanelContainer>
   )
