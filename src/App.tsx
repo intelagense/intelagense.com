@@ -1,5 +1,6 @@
 import Panel from './components/Panel'
 import Caption from './components/Caption'
+import CatalogForm from './components/CatalogForm'
 import styled from 'styled-components'
 
 const PageContainer = styled.div`
@@ -38,23 +39,23 @@ function App() {
         <TitleText place="right">Software Engineer</TitleText>
       </Panel>
       <Panel background="/zoomflip.png" frequency={90} saturation={2} width="half">
-        <Caption type="footer">This is our hero... I suppose.</Caption>
+        <Caption type="header">This is our hero... I suppose.</Caption>
+        <Caption type="footer">A Software engineer & community manager based in Houston, Texas.</Caption>
       </Panel>
-      <Panel background="/wobble.png" frequency={90} saturation={1} width="half" revealOnHover={true}>
+      {/* <Panel background="/wobble.png" frequency={90} saturation={1} width="half" revealOnHover={true}>
         <Caption type="header">A Software engineer & community manager based in Houston, Texas.</Caption>
         <Caption type="footer">Constantly in motion, working on web apps, robots, games, IoT systems or whatever seems fun or useful to create.
         </Caption>
-      </Panel>
+      </Panel> */}
       <Panel width="half">
         <p>Active in Houston’s tech scene, always helping organize meetups and keep new projects moving. Code and Coffee, Side Project Society... wherever builders gather they’re probably close by making sure things work.</p>
         <p>Fights for caffeine, Taco Bell, and thrift shop finds that somehow turn into projects. But without Spotify the hero starts to fade.</p>
         <p>But alas, without Spotify, the hero starts to fade.</p>
       </Panel>
-      <Panel background="/bgcave.jpg" frequency={90} saturation={2} width="half">
-        <></>
-      </Panel>
-      <Panel width="full">
-        <h2>Projects, projects, projects... </h2>
+      <Panel background="/bgcave.jpg" frequency={90} saturation={2} width="full">
+        <Caption type="footer">
+          <h2>Projects, projects, projects... </h2>
+        </Caption>
       </Panel>
       <Panel background="/together.png" frequency={90} saturation={2} width="half" revealOnHover={true}>
         <Caption type="header">Together Calendar</Caption>
@@ -68,29 +69,9 @@ function App() {
         <h2>How to call?</h2>
       </Panel>
       <Panel width="half">
-      <form method="post" data-netlify="true">
-            <div className="fields">
-              <div className="field">
-                <label htmlFor="name">Name</label>
-                <input type="text" name="name" id="name" />
-              </div>
-              <div className="field">
-                <label htmlFor="email">Email</label>
-                <input type="email" name="email" id="email" />
-              </div>
-              <div className="field">
-                <label htmlFor="message">Message</label>
-                <textarea name="message" id="message" rows={4}></textarea>
-              </div>
-            </div>
-            <ul className="actions">
-              <li><input type="submit" value="Send Message" /></li>
-            </ul>
-          </form>
+        <h3>Let's get social</h3>
       </Panel>
-      <Panel width="half">
-        <h2>How to call?</h2>
-      </Panel>
+      <CatalogForm width="half" />
     </PageContainer>
   )
 }
