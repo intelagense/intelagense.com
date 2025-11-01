@@ -74,7 +74,12 @@ function HalftoneBackground({ src, frequency = 30.0, saturation = 1.0, className
 
       imageAspectRef.current = [image.width, image.height]
       imageLoadedRef.current = true
+      // Render immediately, then resize to ensure proper canvas dimensions
       render()
+      // Trigger resize after image loads to ensure proper sizing
+      requestAnimationFrame(() => {
+        handleResize()
+      })
     }
     image.src = src
 
@@ -169,8 +174,12 @@ function HalftoneBackground({ src, frequency = 30.0, saturation = 1.0, className
     // Reset image loaded flag when src changes
     imageLoadedRef.current = false
     
-    // Initial resize
-    handleResize()
+    // Delay initial resize to ensure canvas has been laid out
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        handleResize()
+      })
+    })
     
     // Set up ResizeObserver to watch both canvas and parent
     const resizeObserver = new ResizeObserver((entries) => {
