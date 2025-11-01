@@ -99,25 +99,27 @@ void main() {
   // Cover mode: scale UV to maintain aspect ratio and crop edges
   vec2 coverUv = uv;
   
-  // Calculate aspect ratios
+  // CSS object-fit: cover formula
+  // We need to map canvas UV [0,1] to image UV [0,1]
+  // For cover, we scale so the SMALLER image dimension fills the LARGER canvas dimension
+  
   float canvasAspect = iResolution.x / iResolution.y;
   float imageAspect = iImageAspect.x / iImageAspect.y;
   
-  // For cover mode, we need to map canvas UVs to image UVs
-  // Normalize the aspect ratios to figure out which dimension to scale
-  vec2 imageScale = iImageAspect / iImageAspect.y;  // Normalize height to 1
-  vec2 canvasScale = iResolution / iResolution.y;    // Normalize height to 1
+  // Calculate which dimension fills
+  // If canvas is wider than image, we need to scale UP (zoom in) so height fills
+  // If canvas is taller than image, we need to scale UP (zoom in) so width fills
+  float scale;
+  if (canvasAspect > imageAspect) {
+    // Canvas is wider - we need to zoom in to fill height
+    scale = canvasAspect / imageAspect;  // > 1
+  } else {
+    // Canvas is taller - we need to zoom in to fill width
+    scale = imageAspect / canvasAspect;  // > 1
+  }
   
-  // Scale image UV to match canvas size
-  vec2 scale = canvasScale / imageScale;
-  
-  // Take the minimum scale to ensure we don't undersample
-  // This is WRONG for cover mode - we need max
-  float scaleFactor = min(scale.x, scale.y);
-  
-  // Apply cover mode: use max to zoom in and crop
-  scaleFactor = max(scale.x, scale.y);
-  coverUv = (coverUv - 0.5) / scaleFactor + 0.5;
+  // Apply: divide UVs to zoom in
+  coverUv = (coverUv - 0.5) / scale + 0.5;
   
   vec4 texcolor = texture2D(u_sampler, coverUv);
   vec2 st = uv;
