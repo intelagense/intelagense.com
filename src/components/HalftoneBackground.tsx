@@ -13,6 +13,7 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
   const glRef = useRef<WebGLRenderingContext | null>(null)
   const programRef = useRef<WebGLProgram | null>(null)
   const textureRef = useRef<WebGLTexture | null>(null)
+  const imageAspectRef = useRef<[number, number]>([1, 1])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -67,6 +68,7 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
+      imageAspectRef.current = [image.width, image.height]
       render()
     }
     image.src = src
@@ -82,9 +84,11 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       // Set uniforms
       const iResolutionLoc = gl.getUniformLocation(program, 'iResolution')
       const frequencyLoc = gl.getUniformLocation(program, 'frequency')
+      const iImageAspectLoc = gl.getUniformLocation(program, 'iImageAspect')
       
       gl.uniform2f(iResolutionLoc, canvas.width, canvas.height)
       gl.uniform1f(frequencyLoc, frequency)
+      gl.uniform2f(iImageAspectLoc, imageAspectRef.current[0], imageAspectRef.current[1])
 
       // Bind texture
       gl.activeTexture(gl.TEXTURE0)

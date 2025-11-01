@@ -8,6 +8,7 @@ varying vec2 uv;
 uniform vec2 iResolution;
 uniform sampler2D u_sampler;
 uniform float frequency;
+uniform vec2 iImageAspect;
 
 // Simplex noise function
 vec3 mod289(vec3 x) {
@@ -95,7 +96,30 @@ vec3 halftone(vec3 texcolor, vec2 st, float freq) {
 }
 
 void main() {
-  vec4 texcolor = texture2D(u_sampler, uv);
+  // Cover mode: scale UV to maintain aspect ratio and crop edges
+  vec2 coverUv = uv;
+  
+  // Calculate aspect ratios
+  float canvasAspect = iResolution.x / iResolution.y;
+  float imageAspect = iImageAspect.x / iImageAspect.y;
+  
+  // For cover mode, we need to map canvas UVs to image UVs
+  // Normalize the aspect ratios to figure out which dimension to scale
+  vec2 imageScale = iImageAspect / iImageAspect.y;  // Normalize height to 1
+  vec2 canvasScale = iResolution / iResolution.y;    // Normalize height to 1
+  
+  // Scale image UV to match canvas size
+  vec2 scale = canvasScale / imageScale;
+  
+  // Take the minimum scale to ensure we don't undersample
+  // This is WRONG for cover mode - we need max
+  float scaleFactor = min(scale.x, scale.y);
+  
+  // Apply cover mode: use max to zoom in and crop
+  scaleFactor = max(scale.x, scale.y);
+  coverUv = (coverUv - 0.5) / scaleFactor + 0.5;
+  
+  vec4 texcolor = texture2D(u_sampler, coverUv);
   vec2 st = uv;
   st.x *= iResolution.x / iResolution.y;
   gl_FragColor.rgb = halftone(texcolor.rgb, st, frequency);

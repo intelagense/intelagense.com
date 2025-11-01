@@ -6,7 +6,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 1200px;
+  max-width: 100ch;
   margin: 0 auto;
   border: 2px solid black;
   padding: 10px;
