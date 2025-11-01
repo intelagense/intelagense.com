@@ -34,13 +34,41 @@ const PanelContent = styled.div`
   min-height: 100%;
 `;
 
-const BackgroundLayer = styled.div`
+const BackgroundLayer = styled.div<{ $background?: string; $revealOnHover?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 0;
+  
+  /* Original image overlay on hover */
+  ${props => props.$revealOnHover && props.$background && `
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url(${props.$background});
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+  `}
+`;
+
+const PanelContainerHoverable = styled(PanelContainer)<{ $revealOnHover?: boolean }>`
+  ${props => props.$revealOnHover && `
+    &:hover ${BackgroundLayer}::after {
+      opacity: 1;
+    }
+  `}
 `;
 
 interface PanelProps {
@@ -48,10 +76,11 @@ interface PanelProps {
   frequency?: number
   saturation?: number
   width?: 'full' | 'half'
+  revealOnHover?: boolean
   children: ReactNode
 }
 
-function Panel({ background, frequency = 30, saturation, width = 'full', children }: PanelProps) {
+function Panel({ background, frequency = 30, saturation, width = 'full', revealOnHover = false, children }: PanelProps) {
   // Separate captions from other content
   const captions: ReactNode[] = []
   const content: ReactNode[] = []
@@ -65,9 +94,9 @@ function Panel({ background, frequency = 30, saturation, width = 'full', childre
   })
 
   return (
-    <PanelContainer $width={width}>
+    <PanelContainerHoverable $width={width} $revealOnHover={revealOnHover}>
       {background && (
-        <BackgroundLayer>
+        <BackgroundLayer $background={background} $revealOnHover={revealOnHover}>
           <HalftoneBackground src={background} frequency={frequency} saturation={saturation} />
         </BackgroundLayer>
       )}
@@ -75,7 +104,7 @@ function Panel({ background, frequency = 30, saturation, width = 'full', childre
       <PanelContent>
         {content}
       </PanelContent>
-    </PanelContainer>
+    </PanelContainerHoverable>
   )
 }
 

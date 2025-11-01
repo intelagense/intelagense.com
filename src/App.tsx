@@ -38,11 +38,12 @@ function App() {
         <TitleText place="right">Software Engineer</TitleText>
       </Panel>
       <Panel background="/zoomflip.png" frequency={90} saturation={2} width="half">
-        <Caption type="footer">Our hero I guess?</Caption>
+        <Caption type="footer">This is our hero... I suppose.</Caption>
       </Panel>
-      <Panel background="/background.jpg" frequency={90} saturation={1} width="half">
-        <Caption type="header">In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</Caption>
-        <Caption type="footer">INTELAGENSE</Caption>
+      <Panel background="/wobble.png" frequency={90} saturation={1} width="half" revealOnHover={true}>
+        <Caption type="header">A Software engineer & community manager based in Houston, Texas.</Caption>
+        <Caption type="footer">Always in motion, working on web apps, robots, games, IoT systems or whatever seems fun or useful to create.
+        </Caption>
       </Panel>
     </PageContainer>
   )
