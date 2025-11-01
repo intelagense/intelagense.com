@@ -3,7 +3,7 @@ import { Children, type ReactNode } from 'react'
 import HalftoneBackground from './HalftoneBackground'
 import Caption from './Caption'
 
-const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
+const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: boolean }>`
   position: relative;
   font-family: 'Comic Neue', cursive;
   color: black;
@@ -13,10 +13,15 @@ const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
-  min-height: 300px;
+  ${props => props.$hasBackground ? 'min-height: 300px;' : ''}
   overflow: hidden;
   flex: ${props => props.$width === 'half' ? '1 1 calc(50% - 5px)' : '1 1 100%'};
   
+  p {
+    margin: 0;
+    padding: 10px 0;
+  }
+
   /* Force single column on mobile */
   @media (max-width: 768px) {
     flex: 1 1 100%;
@@ -24,14 +29,14 @@ const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
   }
 `;
 
-const PanelContent = styled.div`
+const PanelContent = styled.div<{ $hasBackground?: boolean }>`
   position: relative;
   z-index: 1;
   pointer-events: none;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  min-height: 100%;
+  justify-content: ${props => props.$hasBackground ? 'flex-end' : 'flex-start'};
+  ${props => props.$hasBackground ? 'min-height: 100%;' : 'padding: 20px;'}
 `;
 
 const BackgroundLayer = styled.div<{ $background?: string; $revealOnHover?: boolean }>`
@@ -41,6 +46,8 @@ const BackgroundLayer = styled.div<{ $background?: string; $revealOnHover?: bool
   right: 0;
   bottom: 0;
   z-index: 0;
+  transition: transform 0.5s ease;
+  transform-origin: center center;
   
   /* Original image overlay on hover */
   ${props => props.$revealOnHover && props.$background && `
@@ -56,17 +63,27 @@ const BackgroundLayer = styled.div<{ $background?: string; $revealOnHover?: bool
       background-position: center;
       background-repeat: no-repeat;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.5s ease;
       pointer-events: none;
       z-index: 1;
     }
   `}
 `;
 
-const PanelContainerHoverable = styled(PanelContainer)<{ $revealOnHover?: boolean }>`
+const PanelContainerHoverable = styled(PanelContainer)<{ $revealOnHover?: boolean }>`  
   ${props => props.$revealOnHover && `
     &:hover ${BackgroundLayer}::after {
       opacity: 1;
+    }
+  `}
+  
+  ${props => !props.$revealOnHover && props.$hasBackground && `
+    &:hover ${BackgroundLayer} {
+      transform: scale(1.01);
+      
+      &::before {
+        animation: barrierFlash 1.2s ease-in-out forwards;
+      }
     }
   `}
 `;
@@ -93,15 +110,17 @@ function Panel({ background, frequency = 30, saturation, width = 'full', revealO
     }
   })
 
+  const hasBackground = !!background
+
   return (
-    <PanelContainerHoverable $width={width} $revealOnHover={revealOnHover}>
+    <PanelContainerHoverable $width={width} $revealOnHover={revealOnHover} $hasBackground={hasBackground}>
       {background && (
         <BackgroundLayer $background={background} $revealOnHover={revealOnHover}>
           <HalftoneBackground src={background} frequency={frequency} saturation={saturation} />
         </BackgroundLayer>
       )}
       {captions}
-      <PanelContent>
+      <PanelContent $hasBackground={hasBackground}>
         {content}
       </PanelContent>
     </PanelContainerHoverable>

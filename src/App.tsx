@@ -26,7 +26,7 @@ const TitleText = styled.div<{ place: 'left' | 'right' }>`
   text-transform: uppercase;
   font-weight: 700;
   padding: 0 2em ;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
 `
 
 function App() {
@@ -42,8 +42,54 @@ function App() {
       </Panel>
       <Panel background="/wobble.png" frequency={90} saturation={1} width="half" revealOnHover={true}>
         <Caption type="header">A Software engineer & community manager based in Houston, Texas.</Caption>
-        <Caption type="footer">Always in motion, working on web apps, robots, games, IoT systems or whatever seems fun or useful to create.
+        <Caption type="footer">Constantly in motion, working on web apps, robots, games, IoT systems or whatever seems fun or useful to create.
         </Caption>
+      </Panel>
+      <Panel width="half">
+        <p>Active in Houston’s tech scene, always helping organize meetups and keep new projects moving. Code and Coffee, Side Project Society... wherever builders gather they’re probably close by making sure things work.</p>
+        <p>Fights for caffeine, Taco Bell, and thrift shop finds that somehow turn into projects. But without Spotify the hero starts to fade.</p>
+        <p>But alas, without Spotify, the hero starts to fade.</p>
+      </Panel>
+      <Panel background="/bgcave.jpg" frequency={90} saturation={2} width="half">
+        <></>
+      </Panel>
+      <Panel width="full">
+        <h2>Projects, projects, projects... </h2>
+      </Panel>
+      <Panel background="/together.png" frequency={90} saturation={2} width="half" revealOnHover={true}>
+        <Caption type="header">Together Calendar</Caption>
+        <Caption type="footer">A web app for creating and sharing collaborative community events.</Caption>
+      </Panel>
+      <Panel background="/cortext.png" frequency={90} saturation={2} width="half" revealOnHover={true}>
+        <Caption type="header">Cortext</Caption>
+        <Caption type="footer">A retro-futurist dystopian point-and-click adventure.</Caption>
+      </Panel>
+      <Panel width="full">
+        <h2>How to call?</h2>
+      </Panel>
+      <Panel width="half">
+      <form method="post" data-netlify="true">
+            <div className="fields">
+              <div className="field">
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" id="name" />
+              </div>
+              <div className="field">
+                <label htmlFor="email">Email</label>
+                <input type="email" name="email" id="email" />
+              </div>
+              <div className="field">
+                <label htmlFor="message">Message</label>
+                <textarea name="message" id="message" rows={4}></textarea>
+              </div>
+            </div>
+            <ul className="actions">
+              <li><input type="submit" value="Send Message" /></li>
+            </ul>
+          </form>
+      </Panel>
+      <Panel width="half">
+        <h2>How to call?</h2>
       </Panel>
     </PageContainer>
   )
