@@ -116,7 +116,7 @@ const SubmitButton = styled.input`
   font-weight: 700;
   padding: 12px 20px;
   background: white;
-  border: 3px solid black;
+  border: 2px solid black;
   cursor: pointer;
   margin-top: 10px;
   transition: all 0.2s ease;
@@ -147,7 +147,7 @@ function CatalogForm({ width = 'full', onSubmit }: CatalogFormProps) {
           <FormFields>
             <FormField>
               <Label htmlFor="name">Your Name</Label>
-              <Input type="text" name="name" id="name" required placeholder="Print clearly" />
+              <Input type="text" name="name" id="name" required placeholder="Type clearly" />
             </FormField>
             <FormField>
               <Label htmlFor="email">Email Address</Label>

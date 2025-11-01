@@ -37,6 +37,11 @@ const PanelContent = styled.div<{ $hasBackground?: boolean }>`
   flex-direction: column;
   justify-content: ${props => props.$hasBackground ? 'flex-end' : 'flex-start'};
   ${props => props.$hasBackground ? 'min-height: 100%;' : 'padding: 20px;'}
+  
+  /* Re-enable pointer events for interactive elements */
+  a, button, input, textarea, select {
+    pointer-events: auto;
+  }
 `;
 
 const BackgroundLayer = styled.div<{ $background?: string; $revealOnHover?: boolean }>`
