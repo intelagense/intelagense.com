@@ -1,2 +1,3 @@
-# Portfolio website
-Just a simple portfolio template to link to projects I have worked on.
+# Comic page
+
+Custom framework for comic books. Or in this case a portfolio.
