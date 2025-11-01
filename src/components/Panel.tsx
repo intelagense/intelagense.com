@@ -16,14 +16,22 @@ const PanelContainer = styled.div<{ $width?: 'full' | 'half' }>`
   min-height: 300px;
   overflow: hidden;
   flex: ${props => props.$width === 'half' ? '1 1 calc(50% - 5px)' : '1 1 100%'};
+  
+  /* Force single column on mobile */
+  @media (max-width: 768px) {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
 `;
 
 const PanelContent = styled.div`
   position: relative;
   z-index: 1;
   pointer-events: none;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
 `;
 
 const BackgroundLayer = styled.div`
@@ -38,11 +46,12 @@ const BackgroundLayer = styled.div`
 interface PanelProps {
   background?: string
   frequency?: number
+  saturation?: number
   width?: 'full' | 'half'
   children: ReactNode
 }
 
-function Panel({ background, frequency = 30, width = 'full', children }: PanelProps) {
+function Panel({ background, frequency = 30, saturation, width = 'full', children }: PanelProps) {
   // Separate captions from other content
   const captions: ReactNode[] = []
   const content: ReactNode[] = []
@@ -59,7 +68,7 @@ function Panel({ background, frequency = 30, width = 'full', children }: PanelPr
     <PanelContainer $width={width}>
       {background && (
         <BackgroundLayer>
-          <HalftoneBackground src={background} frequency={frequency} />
+          <HalftoneBackground src={background} frequency={frequency} saturation={saturation} />
         </BackgroundLayer>
       )}
       {captions}

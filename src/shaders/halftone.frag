@@ -9,6 +9,7 @@ uniform vec2 iResolution;
 uniform sampler2D u_sampler;
 uniform float frequency;
 uniform vec2 iImageSize;
+uniform float saturation;
 
 // Simplex noise function
 vec3 mod289(vec3 x) {
@@ -127,7 +128,24 @@ void main() {
   vec4 texcolor = texture2D(u_sampler, coverUv);
   vec2 st = uv;
   st.x *= canvasAspect;
-  gl_FragColor.rgb = halftone(texcolor.rgb, st, frequency);
+  vec3 halftoneResult = halftone(texcolor.rgb, st, frequency);
+  
+  // Apply subtle anti-aliasing to reduce moiré during browser downscaling
+  // Sample neighboring pixels with very small offsets to smooth the pattern
+  #ifdef GL_OES_standard_derivatives
+    vec2 pixelSize = vec2(dFdx(uv.x), dFdy(uv.y));
+    vec3 sample1 = halftone(texture2D(u_sampler, coverUv + pixelSize * vec2(0.3, 0.0)).rgb, st, frequency);
+    vec3 sample2 = halftone(texture2D(u_sampler, coverUv + pixelSize * vec2(-0.3, 0.0)).rgb, st, frequency);
+    vec3 sample3 = halftone(texture2D(u_sampler, coverUv + pixelSize * vec2(0.0, 0.3)).rgb, st, frequency);
+    vec3 sample4 = halftone(texture2D(u_sampler, coverUv + pixelSize * vec2(0.0, -0.3)).rgb, st, frequency);
+    // Blend with original - subtle smoothing to break up moiré patterns
+    halftoneResult = mix(halftoneResult, (sample1 + sample2 + sample3 + sample4) * 0.25, 0.15);
+  #endif
+  
+  // Apply saturation boost
+  // Convert to grayscale, then interpolate between grayscale and color
+  float gray = dot(halftoneResult, vec3(0.299, 0.587, 0.114));
+  gl_FragColor.rgb = mix(vec3(gray), halftoneResult, saturation);
   gl_FragColor.a = 1.0;
 }
 

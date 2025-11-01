@@ -5,10 +5,11 @@ import fragmentShader from '../shaders/halftone.frag'
 interface HalftoneBackgroundProps {
   src: string
   frequency?: number
+  saturation?: number
   className?: string
 }
 
-function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgroundProps) {
+function HalftoneBackground({ src, frequency = 30.0, saturation = 1.0, className }: HalftoneBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const glRef = useRef<WebGLRenderingContext | null>(null)
   const programRef = useRef<WebGLProgram | null>(null)
@@ -94,6 +95,7 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       const iResolutionLoc = gl.getUniformLocation(program, 'iResolution')
       const frequencyLoc = gl.getUniformLocation(program, 'frequency')
       const iImageSizeLoc = gl.getUniformLocation(program, 'iImageSize')
+      const saturationLoc = gl.getUniformLocation(program, 'saturation')
       
       // Use display resolution (CSS size) for cover calculations, not internal canvas resolution
       // Use rounded integers to avoid sub-pixel issues
@@ -102,6 +104,7 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       // Scaling frequency by resolution multiplier causes severe moiré
       gl.uniform1f(frequencyLoc, frequency)
       gl.uniform2f(iImageSizeLoc, imageAspectRef.current[0], imageAspectRef.current[1])
+      gl.uniform1f(saturationLoc, saturation)
 
       // Bind texture
       gl.activeTexture(gl.TEXTURE0)
@@ -145,8 +148,10 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       
       lastSizeRef.current = { width: displayWidth, height: displayHeight }
       
-      // Use 3x multiplier for print-quality halftone
-      const resolutionMultiplier = 3
+      // Use devicePixelRatio * 2 for clean scaling that reduces moiré
+      // Power-of-2 multipliers align better with browser downsampling
+      const dpr = window.devicePixelRatio || 1
+      const resolutionMultiplier = Math.max(2, Math.round(dpr * 2)) // 2x, 4x, or 6x typically
       resolutionMultiplierRef.current = resolutionMultiplier
       
       // Set canvas internal resolution higher for finer detail
@@ -189,7 +194,7 @@ function HalftoneBackground({ src, frequency = 30.0, className }: HalftoneBackgr
       resizeObserver.disconnect()
       window.removeEventListener('resize', windowResizeHandler)
     }
-  }, [src, frequency])
+  }, [src, frequency, saturation])
 
   return (
     <canvas

@@ -32,17 +32,16 @@ const TitleText = styled.div<{ place: 'left' | 'right' }>`
 function App() {
   return (
     <PageContainer>
-      <Panel background="/bgcave.jpg" frequency={90} width="full">
+      <Panel background="/bgfield.png" frequency={90} width="full">
         <TitleText place="left">Eric Wynn Romere</TitleText>
         <TitleImage src="/intelagensetitle.png" alt="logo" />
         <TitleText place="right">Software Engineer</TitleText>
       </Panel>
-      <Panel background="/whoknows.png" frequency={90} width="half">
-        <Caption type="footer">hero I guess?</Caption>
+      <Panel background="/zoomflip.png" frequency={90} saturation={2} width="half">
+        <Caption type="footer">Our hero I guess?</Caption>
       </Panel>
-      <Panel background="/background.jpg" frequency={90} width="half">
-        <p>In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</p>
-        <Caption type="header">PROPERTY JOURNAL</Caption>
+      <Panel background="/background.jpg" frequency={90} saturation={1} width="half">
+        <Caption type="header">In the muggy shadows of the Houston tech scene our hero writes code among the smell of concrete and burning trash.</Caption>
         <Caption type="footer">INTELAGENSE</Caption>
       </Panel>
     </PageContainer>
