@@ -3,6 +3,8 @@ import { Children, type ReactNode } from 'react'
 import HalftoneBackground from './HalftoneBackground'
 import Caption from './Caption'
 
+export const paperGrain = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E")`
+
 const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: boolean; $backgroundColor?: string }>`
   position: relative;
   font-family: 'Comic Neue', cursive;
@@ -14,6 +16,7 @@ const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: b
   font-size: 1rem;
   font-weight: 700;
   background-color: ${props => props.$backgroundColor || (props.$hasBackground ? 'transparent' : '#f5e6c8')};
+  background-image: ${paperGrain};
   ${props => props.$hasBackground ? 'min-height: 300px;' : ''}
   overflow: hidden;
   flex: ${props => props.$width === 'half' ? '1 1 calc(50% - 5px)' : '1 1 100%'};

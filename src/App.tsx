@@ -1,4 +1,4 @@
-import Panel from './components/Panel'
+import Panel, { paperGrain } from './components/Panel'
 import Caption from './components/Caption'
 import CatalogForm from './components/CatalogForm'
 import styled from 'styled-components'
@@ -12,6 +12,7 @@ const PageContainer = styled.div`
   border: 2px solid black;
   padding: 10px;
   background-color: #faf6ee;
+  background-image: ${paperGrain};
 `
 
 const TitleImage = styled.img`

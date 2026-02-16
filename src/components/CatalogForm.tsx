@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { paperGrain } from './Panel'
 
 const FormContainer = styled.div<{ $width?: 'full' | 'half' }>`
   position: relative;
@@ -6,6 +7,8 @@ const FormContainer = styled.div<{ $width?: 'full' | 'half' }>`
   color: black;
   padding: 5px;
   border-radius: 2px;
+  background-color: #f5e6c8;
+  background-image: ${paperGrain};
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
@@ -43,8 +46,8 @@ const CutLine = styled.div`
     transform: translateX(-50%);
     font-size: 1.2rem;
     color: #c45040;
-    background: #faf6ee;
-    padding: 0 10px;
+    background: ${paperGrain}, linear-gradient(to bottom, #f5e6c8 65%, #faf6ee 65%);
+    padding: 0 12px;
     z-index: 3;
   }
 `
