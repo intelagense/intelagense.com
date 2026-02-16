@@ -3,7 +3,7 @@ import { Children, type ReactNode } from 'react'
 import HalftoneBackground from './HalftoneBackground'
 import Caption from './Caption'
 
-const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: boolean }>`
+const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: boolean; $backgroundColor?: string }>`
   position: relative;
   font-family: 'Comic Neue', cursive;
   color: black;
@@ -13,6 +13,7 @@ const PanelContainer = styled.div<{ $width?: 'full' | 'half'; $hasBackground?: b
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
+  background-color: ${props => props.$backgroundColor || (props.$hasBackground ? 'transparent' : '#f5e6c8')};
   ${props => props.$hasBackground ? 'min-height: 300px;' : ''}
   overflow: hidden;
   flex: ${props => props.$width === 'half' ? '1 1 calc(50% - 5px)' : '1 1 100%'};
@@ -95,6 +96,7 @@ const PanelContainerHoverable = styled(PanelContainer)<{ $revealOnHover?: boolea
 
 interface PanelProps {
   background?: string
+  backgroundColor?: string
   frequency?: number
   saturation?: number
   width?: 'full' | 'half'
@@ -102,7 +104,7 @@ interface PanelProps {
   children: ReactNode
 }
 
-function Panel({ background, frequency = 30, saturation, width = 'full', revealOnHover = false, children }: PanelProps) {
+function Panel({ background, backgroundColor, frequency = 30, saturation, width = 'full', revealOnHover = false, children }: PanelProps) {
   // Separate captions from other content
   const captions: ReactNode[] = []
   const content: ReactNode[] = []
@@ -118,7 +120,7 @@ function Panel({ background, frequency = 30, saturation, width = 'full', revealO
   const hasBackground = !!background
 
   return (
-    <PanelContainerHoverable $width={width} $revealOnHover={revealOnHover} $hasBackground={hasBackground}>
+    <PanelContainerHoverable $width={width} $revealOnHover={revealOnHover} $hasBackground={hasBackground} $backgroundColor={backgroundColor}>
       {background && (
         <BackgroundLayer $background={background} $revealOnHover={revealOnHover}>
           <HalftoneBackground src={background} frequency={frequency} saturation={saturation} />
