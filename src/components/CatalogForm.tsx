@@ -27,7 +27,7 @@ const FormInner = styled.div`
 
 const CutLine = styled.div`
   position: absolute;
-  border: 2px dashed black;
+  border: 2px dashed #c45040;
   top: 0;
   left: 0;
   right: 0;
@@ -42,7 +42,8 @@ const CutLine = styled.div`
     left: 50%;
     transform: translateX(-50%);
     font-size: 1.2rem;
-    background: #eee;
+    color: #c45040;
+    background: #faf6ee;
     padding: 0 10px;
     z-index: 3;
   }
@@ -74,14 +75,14 @@ const Input = styled.input`
   font-size: 1rem;
   padding: 8px 5px;
   border: none;
+  outline: none;
   border-bottom: 2px solid black;
   background: transparent;
-  outline: none;
 
   &:focus {
-    border-bottom: 3px solid black;
+    box-shadow: 0 1px 0 0 black;
   }
-  
+
   &::placeholder {
     color: #999;
     text-transform: none;
@@ -93,16 +94,16 @@ const Textarea = styled.textarea`
   font-family: 'Comic Neue', cursive;
   font-size: 1rem;
   padding: 8px 5px;
-  border: 2px solid black;
+  border: none;
+  outline: 2px solid black;
   background: transparent;
-  outline: none;
   resize: vertical;
   min-height: 80px;
-  
+
   &:focus {
-    border: 3px solid black;
+    outline: 3px solid black;
   }
-  
+
   &::placeholder {
     color: #999;
     text-transform: none;
@@ -116,11 +117,12 @@ const SubmitButton = styled.input`
   font-weight: 700;
   padding: 12px 20px;
   background: white;
-  border: 2px solid black;
+  border: none;
+  outline: 2px solid black;
   cursor: pointer;
   margin-top: 10px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: black;
     color: white;
